@@ -13,7 +13,7 @@ public class Girl {
 
     private String cupSize;
 
-    @Min(value = 18, message = "未成年禁止入内")
+    @Min(value = 18, message = "未成年禁止入内") //小于18不让增加到数据库
     private Integer age;
 
     //无参实例方法

@@ -1,8 +1,10 @@
 package com.imooc.girl.controller;
 
 import com.imooc.girl.domain.Girl;
+import com.imooc.girl.domain.Result;
 import com.imooc.girl.repository.GirlRepository;
 import com.imooc.girl.service.GirlService;
+import com.imooc.girl.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +34,13 @@ public class GirlController {
      * @return
      */
     @PostMapping(value = "/girls")
-    public Girl girlAdd(@Valid Girl girl, BindingResult bindingResult){ //使用BindingResult接受验证失败时返回的结果
+    public Result<Girl> girlAdd(@Valid Girl girl, BindingResult bindingResult){ //使用BindingResult接受验证失败时返回的结果
+        Result result = new Result();
         if(bindingResult.hasErrors()){
-            System.out.println(bindingResult.getFieldError().getDefaultMessage());
-            return null;
+            return ResultUtil.error(1, bindingResult.getFieldError().getDefaultMessage());
         }
-        return girlRepository.save(girl);
+
+        return ResultUtil.success(girlRepository.save(girl));
     }
 
     /**
@@ -90,4 +93,10 @@ public class GirlController {
     public void insertTwoGirls(){
         girlService.insertTwo();
     }
+
+    @GetMapping(value = "girls/getAge/{id}")
+    public Result getAge(@PathVariable("id") Integer id) throws Exception {
+        return ResultUtil.success(girlService.getAge(id));
+    }
+
 }
